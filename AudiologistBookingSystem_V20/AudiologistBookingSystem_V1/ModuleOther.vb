@@ -125,26 +125,26 @@
             endDate = stringHandling.GetDate3
         End While
 
+
+        aud.AddAnnualLeave()
+        Dim tempTime As TimeSpan
+        Dim daysBack As Double = 0
         Dim rsFindHours As Odbc.OdbcDataReader
-        Dim sqlFindHours As New Odbc.OdbcCommand("SELECT * FROM annualleave WHERE DATE <= ? AND DATE >= ? AND audiologistid = ? AND personalappointment = 0", Module1.GetConnection)
+        Dim sqlFindHours As New Odbc.OdbcCommand("SELECT TIMEDIFF(endtime, starttime) FROM annualleave WHERE personalappointment = 0 AND DATE <= ? AND DATE >= ? AND audiologistid = ?", Module1.GetConnection)
         sqlFindHours.Parameters.AddWithValue("date", stringHandling.SQLDate(endDate))
         sqlFindHours.Parameters.AddWithValue("date", stringHandling.SQLDate(startDate))
         sqlFindHours.Parameters.AddWithValue("audiologistid", aud.ReturnAudiologistID)
         rsFindHours = sqlFindHours.ExecuteReader
         While rsFindHours.Read
-            If rsFindHours("starttime").ToString = "00:00:00" And rsFindHours("endtime").ToString = "00:00:00" Then
-
+            temptime = rsFindHours("TIMEDIFF(endtime, starttime)")
+            If temptime >= TimeSpan.Parse("12:00:00") Then
+                daysBack += 1
+            Else
+                daysBack += 0.5
             End If
         End While
 
         aud.cancelannualleave(module1.getconnection)
-        For i = 0 To DateDiff(DateInterval.Day, endDate, startDate) - 1
-            startDate = startDate.AddDays(i)
-            Dim sqlCancelAnnualLeave As New Odbc.OdbcCommand("DELETE FROM annualleave WHERE DATE = ? AND audiologistid = ? AND personalappointment = 0", Module1.GetConnection)
-            sqlCancelAnnualLeave.Parameters.AddWithValue("date", startDate)
-            sqlCancelAnnualLeave.Parameters.AddWithValue("audiologistid", aud.ReturnAudiologistID)
-            sqlCancelAnnualLeave.ExecuteNonQuery()
-        Next
         Console.ForegroundColor = ConsoleColor.Green
         Console.WriteLine("Success.")
         Console.ForegroundColor = ConsoleColor.Gray

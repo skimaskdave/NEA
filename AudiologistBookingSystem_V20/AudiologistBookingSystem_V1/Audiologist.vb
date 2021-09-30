@@ -3,7 +3,7 @@
     Private audiologistID, maxAppointments As Integer
     Private firstName, surname As String
     Private phoneNumber, email As String
-    Private annualLeaveLeft As TimeSpan
+    Private annualLeaveLeft As Double
     Private workHours As WorkingHours
     Private stringHandling As ErrorHandling
 
@@ -11,6 +11,7 @@
         firstName = fName
         surname = sName
         stringHandling = New ErrorHandling
+        annualLeaveLeft = 20.0
     End Sub
 
     Public Function GetAudiologistInfo(ByVal conn As System.Data.Odbc.OdbcConnection) As Boolean
@@ -24,8 +25,7 @@
             maxAppointments = rsGetAudInfo("maxAppointments")
             phoneNumber = rsGetAudInfo("phoneNumber")
             email = rsGetAudInfo("email")
-            annualLeaveLeft = rsGetAudInfo("annualLeaveLeft")
-            CorrectAnnualLeave()
+            FindAnnualLeaveLeft(conn)
             workHours = New WorkingHours(audiologistID)
             workHours.GetWorkingHours(conn)
             Return True
@@ -245,7 +245,13 @@ WHERE meeting.meetingid = meetingattendants.meetingid AND meetingattendants.audi
     End Sub
 
     Public Sub CancelAnnualLeave(ByVal conn As System.Data.Odbc.OdbcConnection)
-
+    For i = 0 To DateDiff(DateInterval.Day, endDate, startDate) - 1
+            startDate = startDate.AddDays(i)
+            Dim sqlCancelAnnualLeave As New Odbc.OdbcCommand("DELETE FROM annualleave WHERE DATE = ? AND audiologistid = ? AND personalappointment = 0", Module1.GetConnection)
+            sqlCancelAnnualLeave.Parameters.AddWithValue("date", startDate)
+            sqlCancelAnnualLeave.Parameters.AddWithValue("audiologistid", aud.ReturnAudiologistID)
+            sqlCancelAnnualLeave.ExecuteNonQuery()
+        Next
     End Sub
 
     Public Sub SearchRepairs(ByVal conn As System.Data.Odbc.OdbcConnection)
@@ -347,16 +353,9 @@ WHERE meeting.meetingid = meetingattendants.meetingid AND meetingattendants.audi
         Return workHours.ReturnHoursForDay(day)
     End Function
 
-    Public Function ReturnAnnualLeaveLeft() As TimeSpan
+    Public Function ReturnAnnualLeaveLeft() As Double
         Return annualLeaveLeft
     End Function
-
-    Public Sub CorrectAnnualLeave()
-        Dim ALstring As String
-        ALstring = annualLeaveLeft.ToString
-        Dim ALsplit As String() = ALstring.Split(":")
-        annualLeaveLeft = New TimeSpan(ALsplit(0), ALsplit(1), ALsplit(2), 0, 0)
-    End Sub
 
     Public Sub CreateNewAud(ByVal conn As System.Data.Odbc.OdbcConnection)
         'firstname
@@ -461,7 +460,7 @@ WHERE meeting.meetingid = meetingattendants.meetingid AND meetingattendants.audi
         Console.WriteLine("Tel Num: " & phoneNumber)
         Console.WriteLine("Email: " & email)
         Console.WriteLine("Maximum number of appointments per week: " & maxAppointments)
-        Console.WriteLine("Annual leave left: " & annualLeaveLeft.Days.ToString & " days " & annualLeaveLeft.Hours.ToString & " hours")
+        Console.WriteLine("Annual leave left: " & annualLeaveLeft & " days")
         Console.WriteLine()
         workHours.PrintWorkingHours()
         Console.WriteLine()
@@ -470,5 +469,22 @@ WHERE meeting.meetingid = meetingattendants.meetingid AND meetingattendants.audi
     Public Function AddAnnualLeave()
 
     End Function
+
+    Public Sub FindAnnualLeaveLeft(ByVal conn As System.Data.Odbc.OdbcConnection)
+        Dim tempTime as TimeSpan
+        
+        Dim rsFindALLeft As Odbc.OdbcDataReader
+        Dim sqlFindALLeft As New Odbc.OdbcCommand("SELECT TIMEDIFF(endtime, starttime) FROM annualleave WHERE personalappointment = 0 AND audiologistid = ?", conn)
+        sqlFindALLeft.Parameters.AddWithValue("audiologistid", audiologistid)
+        rsFindALLeft = sqlFindALLeft.ExecuteReader
+        While rsFindALLeft.Read
+            temptime = rsFindALLeft("TIMEDIFF(endtime, starttime)")
+            If temptime >= TimeSpan.Parse("12:00:00") Then
+                annualLeaveLeft -= 1
+            Else
+                annualleaveleft -= 0.5
+            End If
+        End While
+    End Sub
 
 End Class
