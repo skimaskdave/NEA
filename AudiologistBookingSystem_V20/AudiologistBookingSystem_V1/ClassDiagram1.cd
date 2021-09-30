@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AudiologistBookingSystem_V1.Audiologist">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAQgBAAAAhEAEEAAKEAFgAEAAAoAABAkgAAAA=</HashCode>
+      <FileName>Audiologist.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudiologistBookingSystem_V1.Booking">
+    <Position X="13.25" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAgAIESAAQAAAAAgCgAAAAAAAAAEQQgCAAAAAAAQAA=</HashCode>
+      <FileName>Booking.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudiologistBookingSystem_V1.ErrorHandling" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAEIGAAAEAAAAAAAAAABCAAAIAAAQAABAAA=</HashCode>
+      <FileName>ErrorHandling.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudiologistBookingSystem_V1.Patient">
+    <Position X="7" Y="2.5" Width="1.75" />
+    <NestedTypes>
+      <Struct Name="AudiologistBookingSystem_V1.Patient.PatientCheckStruc" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Patient.vb</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgQBAAAARABAAAggAAAMAEAASMFAAABAAAAAAAAACAQ=</HashCode>
+      <FileName>Patient.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudiologistBookingSystem_V1.WorkingHours">
+    <Position X="3" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAgAAAAAAAAAgACAAAAAAAAAAAIAAAAAAgAA=</HashCode>
+      <FileName>WorkingHours.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Module Name="AudiologistBookingSystem_V1.Module1">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAIAJACAAgAAAAAABAARIAAAAAAAAJAggAAA=</HashCode>
+      <FileName>Module1.vb</FileName>
+    </TypeIdentifier>
+  </Module>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
