@@ -42,7 +42,7 @@
                     endTime(4) = rsGetWorkHours("endTime")
                     lunchLength(4) = rsGetWorkHours("lunchLength")
             End Select
-        End While
+        Loop
     End Sub
 
     Public Function ReturnLunchLength(ByVal day As String) As String
@@ -101,11 +101,11 @@
                             startTime(0) = stringHandling.GetTime
                             Console.WriteLine("Enter end time:")
                             endTime(0) = stringHandling.GetTime
-                        End While
+                        Loop
                         While lunchLength(0) > TimeSpan.Parse("01:00:00")
                             Console.WriteLine("Enter lunch length:")
                             lunchLength(0) = stringHandling.GetTime
-                        End While
+                        Loop
                     End If
                 Case 1
                     If YesNo("Are you working on Tuesday") = True Then
@@ -115,11 +115,11 @@
                             startTime(1) = stringHandling.GetTime
                             Console.WriteLine("Enter end time:")
                             endTime(1) = stringHandling.GetTime
-                        End While
+                        Loop
                         While lunchLength(1) > TimeSpan.Parse("01:00:00")
                             Console.WriteLine("Enter lunch length:")
                             lunchLength(1) = stringHandling.GetTime
-                        End While
+                        Loop
                     End If
                 Case 2
                     If YesNo("Are you working on Wednesday") = True Then
@@ -129,11 +129,11 @@
                             startTime(2) = stringHandling.GetTime
                             Console.WriteLine("Enter end time:")
                             endTime(2) = stringHandling.GetTime
-                        End While
+                        Loop
                         While lunchLength(2) > TimeSpan.Parse("01:00:00")
                             Console.WriteLine("Enter lunch length:")
                             lunchLength(2) = stringHandling.GetTime
-                        End While
+                        Loop
                     End If
                 Case 3
                     If YesNo("Are you working on Thursday") = True Then
@@ -143,11 +143,11 @@
                             startTime(3) = stringHandling.GetTime
                             Console.WriteLine("Enter end time:")
                             endTime(3) = stringHandling.GetTime
-                        End While
+                        Loop
                         While lunchLength(3) > TimeSpan.Parse("01:00:00")
                             Console.WriteLine("Enter lunch length:")
                             lunchLength(3) = stringHandling.GetTime
-                        End While
+                        Loop
                     End If
                 Case 4
                     If YesNo("Are you working on Friday") = True Then
@@ -157,11 +157,11 @@
                             startTime(4) = stringHandling.GetTime
                             Console.WriteLine("Enter end time:")
                             endTime(4) = stringHandling.GetTime
-                        End While
+                        Loop
                         While lunchLength(4) > TimeSpan.Parse("01:00:00")
                             Console.WriteLine("Enter lunch length:")
                             lunchLength(4) = stringHandling.GetTime
-                        End While
+                        Loop
                     End If
             End Select
         Next
@@ -279,8 +279,107 @@
         While rsFindHours.Read
             tempHours = rsFindHours("timediff(endtime, starttime)")
             totalHours += tempHours.TotalHours
-        End While
+        Loop
         Return Math.Round(totalHours / 5)
+    End Function
+
+    Public Sub EditWorkingHours()
+        Dim stringHandling As New ErrorHandling()
+        Dim rsGetWHDay As Odbc.OdbcDataReader
+        Select Case PrintEditWorkingHours()
+            Case 1
+                Console.Clear()
+                Console.Writeline("Monday")
+                Dim sqlGetWHMon As New Odbc.OdbcCommand("SELECT starttime, endtime, lunchlength FROM workinghours WHERE audiologistid = ? AND DAY = 'Mon'", Module1.GetConnection)
+                sqlGetWHMon.Parameters.AddWithValue("audiologistid", audiologistID)
+                rsGetWHDay = sqlGetWHMon.ExecuteReader
+                If rsGetWHDay.Read() Then
+                    Console.Writeline("Current working hours: " & rsGetWHDay("starttime") & " - " & rsGetWHDay("endtime"))
+                    Console.WriteLine("Current lunch hours: " & rsGetWHDay("lunchlength"))
+                End If
+                While startTime(0) >= endTime(0)
+                    Console.WriteLine("Enter new start time:")
+                    startTime(0) = stringHandling.GetTime
+                    Console.WriteLine("Enter new end time:")
+                    endTime(0) = stringHandling.GetTime
+                Loop
+                While lunchLength(0) > TimeSpan.Parse("01:00:00")
+                    Console.WriteLine("Enter new lunch length:")
+                    lunchLength(0) = stringHandling.GetTime
+                Loop
+            Case 2
+                Console.Clear()
+                Console.Writeline("Tuesday")
+                Dim sqlGetWHTue As New Odbc.OdbcCommand("SELECT starttime, endtime, lunchlength FROM workinghours WHERE audiologistid = ? AND DAY = 'Tue'", Module1.GetConnection)
+                sqlGetWHTue.Parameters.AddWithValue("audiologistid", audiologistID)
+                rsGetWHDay = sqlGetWHTue.ExecuteReader
+                If rsGetWHDay.Read() Then
+                    Console.Writeline("Current working hours: " & rsGetWHDay("starttime") & " - " & rsGetWHDay("endtime"))
+                    Console.WriteLine("Current lunch hours: " & rsGetWHDay("lunchlength"))
+                End If
+                While startTime(1) >= endTime(1)
+                    Console.WriteLine("Enter new start time:")
+                    startTime(1) = stringHandling.GetTime
+                    Console.WriteLine("Enter new end time:")
+                    endTime(1) = stringHandling.GetTime
+                Loop
+                While lunchLength(1) > TimeSpan.Parse("01:00:00")
+                    Console.WriteLine("Enter new lunch length:")
+                    lunchLength(1) = stringHandling.GetTime
+                Loop
+            Case 3
+                Console.Clear()
+            Case 4
+                Console.Clear()
+            Case 5
+                Console.Clear()
+            Case 6
+                Console.Clear()
+                Console.ForegroundColor = ConsoleColor.Green
+                Console.Writeline("Success. Audiologist working hours have been changed.")
+                Console.ForegroundColor = ConsoleColor.Gray
+        End Select
+    End Sub
+
+    Public Function PrintEditWorkingHours() As Integer
+        Console.CursorVisible = False
+        Dim currentChoice As Integer = 1
+        Dim choice As ConsoleKey
+        Console.Clear()
+        Console.WriteLine("Choose day to edit:
+   Monday
+   Tuesday
+   Wednesday
+   Thursday
+   Friday
+   FINISH
+")
+        Console.SetCursorPosition(0, 1)
+        Console.Write(" >")
+        Do
+            choice = Console.ReadKey(True).Key
+            Select Case choice
+                Case ConsoleKey.W, ConsoleKey.UpArrow, ConsoleKey.A, ConsoleKey.LeftArrow
+                    If currentChoice > 1 Then
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write("  ")
+                        currentChoice -= 1
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write(" >")
+                    End If
+                Case ConsoleKey.S, ConsoleKey.DownArrow, ConsoleKey.D, ConsoleKey.RightArrow
+                    If currentChoice < 6 Then
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write("  ")
+                        currentChoice += 1
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write(" >")
+                    End If
+            End Select
+        Loop Until choice = ConsoleKey.Enter
+        Console.CursorVisible = True
+        Console.Clear()
+        Return currentChoice
     End Function
 
 End Class

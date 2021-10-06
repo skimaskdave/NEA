@@ -8,15 +8,14 @@
             Console.WriteLine("Other Menu")
             Console.ForegroundColor = ConsoleColor.Gray
             Console.WriteLine("
-1. Edit Audiologist Information
+1. Edit Audiologist Information (Including working hours)
 2. Edit Patient Information
 3. Add Meeting Attendants
-4. Change Working Hours
-5. Cancel Annual Leave
-6. Cancel Meeting
-7. Add Patient Notes
-8. Add New Audiologist
-9. Add New Patient
+4. Cancel Annual Leave
+5. Cancel Meeting
+6. Add Patient Notes
+7. Add New Audiologist
+8. Add New Patient
 0. Exit")
             selection = Console.ReadKey(True).Key
 
@@ -57,7 +56,41 @@
 
     Sub EditAudInfo()
         Select Case PrintEditAudInfo()
-            Case
+            Case 1
+                Console.Clear()
+                Dim fName, sName As String
+                Dim stringHandling As New ErrorHandling
+                Dim aud As Audiologist = Module1.GetAudiologist
+                aud.GetAudiologistInfo(Module1.GetConnection())
+                Console.WriteLine("Enter new audiologist first name: ")
+                fName = stringHandling.TryString(1).ToUpper
+                Console.WriteLine("Enter new audiologist surname: ")
+                sName = stringHandling.TryString(1).ToUpper
+                aud.ChangeName(fName, sName, Module1.GetConnection)
+            Case 2
+                Dim phoneNumber As String
+                Dim stringHandling As New ErrorHandling
+                Dim aud As Audiologist = Module1.GetAudiologist
+                aud.GetAudiologistInfo(Module1.GetConnection())
+                Console.Clear()
+                Console.WriteLine("Enter phone number: ")
+                phoneNumber = stringHandling.TryString(11, 14)
+            Case 3
+                Dim email As String
+                Dim stringHandling As New ErrorHandling
+                Dim aud As Audiologist = Module1.GetAudiologist
+                aud.GetAudiologistInfo(Module1.GetConnection())
+                Console.Clear()
+                Console.WriteLine("Enter email: ")
+                email = stringHandling.TryEmail.ToUpper
+            Case 4
+                Dim stringHandling As New ErrorHandling
+                Dim aud As Audiologist = Module1.GetAudiologist
+                aud.GetAudiologistInfo(Module1.GetConnection())
+                aud.EditWorkingHours
+        End Select
+        Console.WriteLine("Press any key to continue...")
+        Console.ReadKey()
     End Sub
 
     Function PrintEditAudInfo() As Integer
@@ -103,10 +136,6 @@
     End Sub
 
     Sub AddMeetingAttendants()
-
-    End Sub
-
-    Sub ChangeWorkingHours()
 
     End Sub
 

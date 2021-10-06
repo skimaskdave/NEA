@@ -521,12 +521,40 @@ WHERE meeting.meetingid = meetingattendants.meetingid AND meetingattendants.audi
     Public Sub ChangeName(ByVal fName As String, ByVal sName As String, ByVal conn as System.Data.Odbc.OdbcConnection)
         firstName = fName
         surname = sName
-        Dim sqlChangeAudName As New Odbc.OdbcCommand("", conn)
+        Dim sqlChangeAudName As New Odbc.OdbcCommand("UPDATE audiologists SET firstName = ? AND surname = ? WHERE audiologistID = ?", conn)
+        sqlChangeAudName.Parameters.AddWithValue("firstname", firstName)
+        sqlChangeAudName.Parameters.AddWithValue("surname", surname)
+        sqlChangeAudName.Parameters.AddWithValue("audiologistid", audiologistID)
         sqlChangeAudName.ExecuteNonQuery()
         Console.ForegroundColor = ConsoleColor.Green
         Console.WriteLine("Success. Audiologist name changed to " & firstname & " " & surname)
         Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
 
+    Public Sub ChangePhoneNumber(ByVal telNum As String, ByVal conn As System.Data.Odbc.OdbcConnection)
+        phoneNumber = telNum
+        Dim sqlChangeAudTel As New Odbc.OdbcCommand("UPDATE audiologists SET phonenumber = ? WHERE audiologistID = ?", conn)
+        sqlChangeAudTel.Parameters.AddWithValue("phonenumber", phoneNumber)
+        sqlChangeAudTel.Parameters.AddWithValue("audiologistid", audiologistID)
+        sqlChangeAudTel.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Audiologist phone number changed to " & phoneNumber)
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
+    Public Sub ChangeEmail(ByVal userEmail As String, ByVal conn As System.Data.Odbc.OdbcConnection)
+        email = userEmail
+        Dim sqlChangeAudEmail As New Odbc.OdbcCommand("UPDATE audiologists SET email = ? WHERE audiologistID = ?", conn)
+        sqlChangeEmail.Parameters.AddWithValue("email", email)
+        sqlChangeEmail.Parameters.AddWithValue("audiologistid", audiologistID)
+        sqlChangeEmail.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Audiologist email changed to " & email)
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
+    Public Sub EditWorkingHours()
+        workHours.EditWorkingHours()
     End Sub
 
 End Class
