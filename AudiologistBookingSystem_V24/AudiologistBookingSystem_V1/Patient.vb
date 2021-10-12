@@ -800,4 +800,20 @@
         Console.WriteLine()
     End Sub
 
+    Public Sub ChangePatNameDB()
+        Dim sqlChangePatName As New Odbc.OdbcCommand("", Module1.GetConnection())
+        sqlChangeEmail.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient name has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
+    Public Sub ChangePatTel(ByVal telNum As String)
+        Dim sqlChangeTelNum As New Odbc.OdbcCommand("", Module1.GetConnection())
+        sqlChangeTelNum.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient phone number has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
 End Class

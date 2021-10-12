@@ -52,13 +52,14 @@
     End Sub
 
     Sub EditAudInfo()
-        Select Case PrintEditAudInfo()
+        Dim choice As Integer = PrintEditAudInfo()
+        Dim stringHandling As New ErrorHandling
+        Dim aud As Audiologist = Module1.GetAudiologist
+        aud.GetAudiologistInfo()
+        Select Case choice
             Case 1
                 Console.Clear()
                 Dim fName, sName As String
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 Console.WriteLine("Enter new audiologist first name: ")
                 fName = stringHandling.TryString(1).ToUpper
@@ -67,26 +68,17 @@
                 aud.ChangeName(fName, sName)
             Case 2
                 Dim phoneNumber As String
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 Console.WriteLine("Enter phone number: ")
                 phoneNumber = stringHandling.TryString(11, 14)
                 aud.ChangePhoneNumber(phoneNumber)
             Case 3
                 Dim email As String
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 Console.WriteLine("Enter email: ")
                 email = stringHandling.TryEmail.ToUpper
                 aud.ChangeEmail(email)
             Case 4
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 aud.EditWorkingHours
         End Select
@@ -133,8 +125,18 @@
     End Function
 
     Sub EditPatientInfo()
+        Dim stringHandling As New ErrorHandling
+        Console.Write("Enter patient first name: ")
+        fName = stringHandling.TryString(1).ToUpper
+        Console.Write("Enter patient surname: ")
+        sName = stringHandling.TryString(1).ToUpper
+        Dim pat As New Patient(fName, sName)
+        pat.GetPatientInfo(2)
+
         Select Case PrintEditPatientInfo()
             Case 1
+                pat.ChangePatName
+                pat.ChangePatNameDB
             Case 2
             Case 3
             Case 4
