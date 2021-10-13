@@ -135,14 +135,43 @@
 
         Select Case PrintEditPatientInfo()
             Case 1
+                Console.Clear()
                 pat.ChangePatName
                 pat.ChangePatNameDB
             Case 2
+                Dim telNum As String
+                Console.Clear()
+                Console.WriteLine("Enter phone number: ")
+                telNum = stringHandling.TryString(11, 14)
+                pat.ChangePatTel(telNum)
             Case 3
+                Dim uEmail As String
+                Console.Clear()
+                Console.WriteLine("Enter email: ")
+                email = stringHandling.TryEmail.ToLower
+                pat.ChangePatEmail(uEmail)
             Case 4
+                Dim dob As Date
+                Console.Clear()
+                Console.WriteLine("Enter date of birth: ")
+                dob = stringHandling.GetDate4()
+                pat.ChangePatDOB(dob)
             Case 5
+                Console.Clear()
+                pat.GetCompany()
+                pat.ChangePatCompany()
+                pat.GetImplant()
+                pat.ChangePatImplant()
+                pat.GetProcessor()
+                pat.ChangePatProcessor()
             Case 6
+                Console.Clear()
+                pat.GetImplant()
+                pat.ChangePatImplant()
             Case 7
+                Console.Clear()
+                pat.GetProcessor()
+                pat.ChangePatProcessor()
         End Select
     End Sub
 

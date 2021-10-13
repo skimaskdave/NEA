@@ -229,7 +229,7 @@
                 Case 4
                     Console.Clear()
                     Console.WriteLine("Enter email: ")
-                    email = stringHandling.TryEmail.ToUpper
+                    email = stringHandling.TryEmail.ToLower
                 Case 5
                     Console.Clear()
                     Console.WriteLine("Enter date of birth: ")
@@ -801,19 +801,82 @@
     End Sub
 
     Public Sub ChangePatNameDB()
-        Dim sqlChangePatName As New Odbc.OdbcCommand("", Module1.GetConnection())
-        sqlChangeEmail.ExecuteNonQuery()
+        Dim sqlChangePatName As New Odbc.OdbcCommand("UPDATE patients SET firstName = ?, surname = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangePatName.Parameters.AddWithValue("firstName", firstName)
+        sqlChangePatName.Parameters.AddWithValue("surname", surname)
+        sqlChangePatName.Parameters.AddWithValue("patientID", patientID)
+        sqlChangePatName.ExecuteNonQuery()
         Console.ForegroundColor = ConsoleColor.Green
         Console.WriteLine("Success. Patient name has been changed.")
         Console.ForegroundColor = ConsoleColor.Gray
     End Sub
 
     Public Sub ChangePatTel(ByVal telNum As String)
-        Dim sqlChangeTelNum As New Odbc.OdbcCommand("", Module1.GetConnection())
+        phoneNumber = telNum
+        Dim sqlChangeTelNum As New Odbc.OdbcCommand("UPDATE patients SET phoneNumber = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeTelNum.Parameters.AddWithValue("phoneNumber", phoneNumber)
+        sqlChangeTelNum.Parameters.AddWithValue("patientID", patientID)
         sqlChangeTelNum.ExecuteNonQuery()
         Console.ForegroundColor = ConsoleColor.Green
         Console.WriteLine("Success. Patient phone number has been changed.")
         Console.ForegroundColor = ConsoleColor.Gray
     End Sub
+
+    Public Sub ChangePatEmail(ByVal uEmail As String)
+        email = uEmail
+        Dim sqlChangeEmail As New Odbc.OdbcCommand("UPDATE patients SET email = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeEmail.Parameters.AddWithValue("email", email)
+        sqlChangeEmail.Parameters.AddWithValue("patientiD", patientID)
+        sqlChangeEmail.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient email has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
+    Public Sub ChangePatDOB(ByVal newDOB As Date)
+        Dim stringHandling As New ErrorHandling()
+        dob = newDOB
+        Dim sqlChangeDOB As New Odbc.OdbcCommand("UPDATE patients SET dob = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeDOB.Parameters.AddWithValue("dob", DOB)
+        sqlChangeDOB.Parameters.AddWithValue("patientID", patientID)
+        sqlChangeDOB.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient date of birth has been changed to " & stringHandling.SQLDate(DOB) & ".")
+        Console.ForegroundColor = ConsoleColor.GrayangeDOB.ExecuteNonQuery()
+    End Sub
+
+    Public Sub ChangePatCompany()
+        company = newCompany
+        Dim sqlChangeCompany As New Odbc.OdbcCommand("UPDATE patients SET company = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeCompany.Parameters.AddWithValue("company", company)
+        sqlChangeCompany.Parameters.AddWithValue("patientID", patientID)
+        sqlChangeCompany.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient company has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
+    Public Sub ChangePatImplant()
+        implant = newImplant
+        Dim sqlChangeImplant As New Odbc.OdbcCommand("UPDATE patients SET implant = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeImplant.Parameters.AddWithValue("implant", implant)
+        sqlChangeImplant.Parameters.AddWithValue("patientID", patientID)
+        sqlChangeImplant.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient implant has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+    
+    Public Sub ChangePatProcessor(
+        processor = newProcessor
+        Dim sqlChangeProcessor As New Odbc.OdbcCommand("UPDATE patients SET processor = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeProcessor.Parameters.AddWithValue("processor", processor)
+        sqlChangeProcessor.Parameters.AddWithValue("patientID", patientID)
+        sqlChangeProcessor.ExecuteNonQuery
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient processor has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
 
 End Class
