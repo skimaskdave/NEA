@@ -172,7 +172,13 @@
                 Console.Clear()
                 pat.GetProcessor()
                 pat.ChangePatProcessor()
+            Case 8
+                Console.Clear()
+                pat.AddDis
+                pat.ChangePatAddDis()
         End Select
+        Console.WriteLine("Press any key to continue...")
+        Console.ReadKey()
     End Sub
 
     Function PrintEditPatientInfo()
@@ -188,6 +194,7 @@
    Implant/Processor Company
    Implant Model
    Processor Model
+   Additional Disabilties
 ")
         Console.SetCursorPosition(0, 1)
         Console.Write(" >")
@@ -203,7 +210,7 @@
                         Console.Write(" >")
                     End If
                 Case ConsoleKey.S, ConsoleKey.DownArrow, ConsoleKey.D, ConsoleKey.RightArrow
-                    If currentChoice < 7 Then
+                    If currentChoice < 8 Then
                         Console.SetCursorPosition(0, currentChoice)
                         Console.Write("  ")
                         currentChoice += 1
@@ -214,6 +221,10 @@
         Loop Until choice = ConsoleKey.Enter
         Console.CursorVisible = True
         Return currentChoice
+    End Function
+
+    Sub AddMeetingAttendants()
+
     End Sub
 
     Sub CancelAnnualLeave()

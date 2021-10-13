@@ -842,11 +842,10 @@
         sqlChangeDOB.ExecuteNonQuery()
         Console.ForegroundColor = ConsoleColor.Green
         Console.WriteLine("Success. Patient date of birth has been changed to " & stringHandling.SQLDate(DOB) & ".")
-        Console.ForegroundColor = ConsoleColor.GrayangeDOB.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Gray
     End Sub
 
     Public Sub ChangePatCompany()
-        company = newCompany
         Dim sqlChangeCompany As New Odbc.OdbcCommand("UPDATE patients SET company = ? WHERE patientID = ?", Module1.GetConnection())
         sqlChangeCompany.Parameters.AddWithValue("company", company)
         sqlChangeCompany.Parameters.AddWithValue("patientID", patientID)
@@ -857,7 +856,6 @@
     End Sub
 
     Public Sub ChangePatImplant()
-        implant = newImplant
         Dim sqlChangeImplant As New Odbc.OdbcCommand("UPDATE patients SET implant = ? WHERE patientID = ?", Module1.GetConnection())
         sqlChangeImplant.Parameters.AddWithValue("implant", implant)
         sqlChangeImplant.Parameters.AddWithValue("patientID", patientID)
@@ -867,14 +865,29 @@
         Console.ForegroundColor = ConsoleColor.Gray
     End Sub
     
-    Public Sub ChangePatProcessor(
-        processor = newProcessor
+    Public Sub ChangePatProcessor()
         Dim sqlChangeProcessor As New Odbc.OdbcCommand("UPDATE patients SET processor = ? WHERE patientID = ?", Module1.GetConnection())
         sqlChangeProcessor.Parameters.AddWithValue("processor", processor)
         sqlChangeProcessor.Parameters.AddWithValue("patientID", patientID)
         sqlChangeProcessor.ExecuteNonQuery
         Console.ForegroundColor = ConsoleColor.Green
         Console.WriteLine("Success. Patient processor has been changed.")
+        Console.ForegroundColor = ConsoleColor.Gray
+    End Sub
+
+    Public Sub AddDis()
+        Dim stringHandling As New ErrorHandling()
+        Console.Writeline("Enter patient additional disabilities: ")
+        additionalDisabilities = stringHandling.TryString(1, 255)
+    End Sub
+
+    Public Sub ChangePatAddDis()
+        Dim sqlChangeAddDis As New Odbc.OdbcCommand("UPDATE patients SET additionaldisabilities = ? WHERE patientID = ?", Module1.GetConnection())
+        sqlChangeAddDis.Parameters.AddWithValue("additionaldisabilities", additionalDisabilities)
+        sqlChangeAddDis.Parameters.AddWithValue("patientID", patientID)
+        sqlChangeAddDis.ExecuteNonQuery()
+        Console.ForegroundColor = ConsoleColor.Green
+        Console.WriteLine("Success. Patient additional disabilities has been changed.")
         Console.ForegroundColor = ConsoleColor.Gray
     End Sub
 
