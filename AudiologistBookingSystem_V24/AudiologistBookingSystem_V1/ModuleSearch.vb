@@ -544,6 +544,7 @@ Press any key to continue...")
         Console.WriteLine("
 Press any key to continue...")
         Console.ReadKey()
+        Return 
     End Sub
 
     Sub PrintSearchMeetDate(ByVal stringHandling As ErrorHandling, ByVal meetDate As Date)

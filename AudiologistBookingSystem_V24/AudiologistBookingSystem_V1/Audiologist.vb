@@ -373,7 +373,7 @@ WHERE meeting.meetingid = meetingattendants.meetingid AND meetingattendants.audi
                 Case 1
                     Console.Clear()
                     Console.WriteLine("Enter phone number: ")
-                    phoneNumber = stringHandling.TryString(11, 14)
+                    phoneNumber = stringHandling.TryPhone()
                     flags(0) = True
                 Case 2
                     Console.Clear()

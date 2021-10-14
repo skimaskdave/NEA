@@ -614,6 +614,21 @@ VALUES(" & aud.ReturnAudiologistID & ", '" & stringHandling.SQLDate(startDate) &
             meetingID = rsMeetingID("meetingid")
         End If
 
+        BookMeetingAttendees(meetingID)
+        
+        Console.WriteLine("Press any key to continue...")
+        Console.ReadKey()
+    End Sub
+
+    Public Sub BookMeetingAttendees(ByVal meetingID As Integer)
+        Dim rsGetMeeting As Odbc.OdbcDataReader
+        Dim sqlGetMeeting As OdbcCommand("select * from meeting where meetingid = ?", Module1.GetConnection())
+        sqlGetMeeting.Parameters.AddWithValue("meetingid", meetingID)
+        rsGetMeeting = sqlGetMeeting.ExecuteReader()
+        If rsGetMeeting.Read
+
+        End If
+
         Dim meetingAuds As List(Of Audiologist) = AudiologistSelectionMeeting(startTime, endTime, GetWeekDay(day.DayOfWeek))
         Console.Clear()
         For i = 0 To meetingAuds.Count - 1
@@ -622,8 +637,6 @@ VALUES(" & aud.ReturnAudiologistID & ", '" & stringHandling.SQLDate(startDate) &
             Console.ForegroundColor = ConsoleColor.Green
             Console.WriteLine(meetingAuds(i).ReturnAudiologistName & " has been booked into the meeting.")
         Next
-        Console.WriteLine("Press any key to continue...")
-        Console.ReadKey()
     End Sub
 
     Public Function AudiologistSelectionMeeting(ByVal startTime As TimeSpan, ByVal endTime As TimeSpan, ByVal dayOfWeek As String) As List(Of Audiologist)

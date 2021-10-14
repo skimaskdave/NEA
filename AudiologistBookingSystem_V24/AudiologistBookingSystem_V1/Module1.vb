@@ -1,4 +1,5 @@
 ﻿Imports System.Data.Odbc
+Imports System.Text.RegularExpressions
 
 Module Module1
     Dim conn As New System.Data.Odbc.OdbcConnection("DRIVER={MySQL ODBC 5.3 ANSI Driver};SERVER=localhost;PORT=3306;DATABASE=audiology;USER=root;PASSWORD=root;OPTION=3;")

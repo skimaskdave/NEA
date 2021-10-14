@@ -51,11 +51,12 @@
     Public Function TryEmail() As String
         Dim flag As Boolean = False
         Dim uInput As String = ""
+        Dim userRegex As String = "^(([a-zA-Z\d])+(\.)?([a-zA-Z\d])+)*@([a-zA-Z\d])+((\.)[a-zA-Z\d]+)+$"
         Do Until flag = True
             Try
                 flag = True
                 uInput = Console.ReadLine()
-                If uInput.Contains("@") = False Or uInput.Length < 5 Then
+                If Regex.IsMatch(uInput, userRegex) = False Or uInput.Length < 5 Then
                     Console.WriteLine("Make sure to enter a valid email.")
                     Throw New Exception
                 End If
@@ -65,6 +66,25 @@
             End Try
         Loop
         Return uInput
+    End Function
+
+    Public Function TryPhone() As String
+        Dim flag As Boolean = False
+        Dim uInput As String = ""
+        Dim userRegex As String = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$"
+        Do Until flag = True
+            Try
+                flag = True
+                uInput = Console.ReadLine()
+                If Regex.IsMatch(uInput, userRegex) = False Then
+                    Console.WriteLine("Make sure to enter a valid phone number.")
+                    Throw New Exception
+                End If
+            Catch ex As Exception
+                flag = False
+                Console.WriteLine("An error occured. " & ex.Message)
+            End Try
+        Loop
     End Function
 
     Public Function GetDate2(d1 As Date) As Date

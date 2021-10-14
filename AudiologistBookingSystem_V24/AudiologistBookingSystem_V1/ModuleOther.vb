@@ -70,7 +70,7 @@
                 Dim phoneNumber As String
                 Console.Clear()
                 Console.WriteLine("Enter phone number: ")
-                phoneNumber = stringHandling.TryString(11, 14)
+                phoneNumber = stringHandling.TryPhone()
                 aud.ChangePhoneNumber(phoneNumber)
             Case 3
                 Dim email As String
@@ -174,7 +174,7 @@
                 pat.ChangePatProcessor()
             Case 8
                 Console.Clear()
-                pat.AddDis
+                pat.AddDis()
                 pat.ChangePatAddDis()
         End Select
         Console.WriteLine("Press any key to continue...")
@@ -224,7 +224,43 @@
     End Function
 
     Sub AddMeetingAttendants()
+        'find meeting
+        'get audiologists
+        'add them
+        Dim meetings As New List(Of Integer)
+        Dim stringHandling As New ErrorHandling()
+        Dim day1 As Date
+        Dim place As String
 
+        While meetings.Count = 0
+            Console.Writeline("Enter meeting place: ")
+            place = stringHandling.TryString(1)
+            Console.Writeline("Enter date of meeting: ")
+            day1 = stringHandling.GetDate3()
+
+            Dim rsFindMeetings As Odbc.OdbcDataReader
+            Dim sqlFindMeetings As New Odbc.OdbcCommand("SELECT * FROM meeting WHERE place LIKE %?% AND DATE = ?", Module1.GetConnection())
+            sqlFindMeetings.Parameters.AddWithValue("place", place)
+            sqlFindMeetings.Parameters.AddWithValue("date", day1)
+            rsFindMeetings = sqlFindMeetings.ExecuteReader()
+
+            Console.Writeline("Meetings: " & place & " - " & stringHandling.SQLDate(day1))
+            While rsFindMeetings.Read 
+            meetings.Add(rsFindMeetings("meetingID"))
+            Console.WriteLine(meetings.Count & ". " & rsFindMeetings("description") & " " & rsFindMeetings("starttime").ToString & " - " & rsFindMeetings("endtime").ToString)
+            End While
+        End While
+        Dim meetingChoice As Integer = -1
+        While meetingChoice > meetings.Count Or meetingChoice < meetings.Count
+            Console.Write"Enter meeting choice: ")
+            Try
+                meetingChoice = Console.ReadLine()
+            Catch ex As Exception
+                Console.WriteLine("An error occured. " & ex.Message)
+            End Try
+        End While
+        Dim bookMeetAtt As New Booking()
+        bookMeetAtt.
     End Sub
 
     Sub CancelAnnualLeave()

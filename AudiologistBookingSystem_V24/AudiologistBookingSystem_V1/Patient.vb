@@ -225,7 +225,7 @@
                 Case 3
                     Console.Clear()
                     Console.WriteLine("Enter phone number: ")
-                    phoneNumber = stringHandling.TryString(11, 14)
+                    phoneNumber = stringHandling.TryPhone()
                 Case 4
                     Console.Clear()
                     Console.WriteLine("Enter email: ")
