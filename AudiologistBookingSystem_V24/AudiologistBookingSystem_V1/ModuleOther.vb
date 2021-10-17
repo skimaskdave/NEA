@@ -52,13 +52,14 @@
     End Sub
 
     Sub EditAudInfo()
-        Select Case PrintEditAudInfo()
+        Dim choice As Integer = PrintEditAudInfo()
+        Dim stringHandling As New ErrorHandling
+        Dim aud As Audiologist = Module1.GetAudiologist
+        aud.GetAudiologistInfo()
+        Select Case choice
             Case 1
                 Console.Clear()
                 Dim fName, sName As String
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 Console.WriteLine("Enter new audiologist first name: ")
                 fName = stringHandling.TryString(1).ToUpper
@@ -67,28 +68,19 @@
                 aud.ChangeName(fName, sName)
             Case 2
                 Dim phoneNumber As String
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 Console.WriteLine("Enter phone number: ")
-                phoneNumber = stringHandling.TryString(11, 14)
+                phoneNumber = stringHandling.TryPhone()
                 aud.ChangePhoneNumber(phoneNumber)
             Case 3
                 Dim email As String
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
                 Console.WriteLine("Enter email: ")
                 email = stringHandling.TryEmail.ToUpper
                 aud.ChangeEmail(email)
             Case 4
-                Dim stringHandling As New ErrorHandling
-                Dim aud As Audiologist = Module1.GetAudiologist
-                aud.GetAudiologistInfo()
                 Console.Clear()
-                aud.EditWorkingHours()
+                aud.EditWorkingHours
         End Select
         Console.WriteLine("Press any key to continue...")
         Console.ReadKey()
@@ -133,11 +125,142 @@
     End Function
 
     Sub EditPatientInfo()
+        Dim stringHandling As New ErrorHandling
+        Console.Write("Enter patient first name: ")
+        fName = stringHandling.TryString(1).ToUpper
+        Console.Write("Enter patient surname: ")
+        sName = stringHandling.TryString(1).ToUpper
+        Dim pat As New Patient(fName, sName)
+        pat.GetPatientInfo(2)
 
+        Select Case PrintEditPatientInfo()
+            Case 1
+                Console.Clear()
+                pat.ChangePatName
+                pat.ChangePatNameDB
+            Case 2
+                Dim telNum As String
+                Console.Clear()
+                Console.WriteLine("Enter phone number: ")
+                telNum = stringHandling.TryString(11, 14)
+                pat.ChangePatTel(telNum)
+            Case 3
+                Dim uEmail As String
+                Console.Clear()
+                Console.WriteLine("Enter email: ")
+                email = stringHandling.TryEmail.ToLower
+                pat.ChangePatEmail(uEmail)
+            Case 4
+                Dim dob As Date
+                Console.Clear()
+                Console.WriteLine("Enter date of birth: ")
+                dob = stringHandling.GetDate4()
+                pat.ChangePatDOB(dob)
+            Case 5
+                Console.Clear()
+                pat.GetCompany()
+                pat.ChangePatCompany()
+                pat.GetImplant()
+                pat.ChangePatImplant()
+                pat.GetProcessor()
+                pat.ChangePatProcessor()
+            Case 6
+                Console.Clear()
+                pat.GetImplant()
+                pat.ChangePatImplant()
+            Case 7
+                Console.Clear()
+                pat.GetProcessor()
+                pat.ChangePatProcessor()
+            Case 8
+                Console.Clear()
+                pat.AddDis()
+                pat.ChangePatAddDis()
+        End Select
+        Console.WriteLine("Press any key to continue...")
+        Console.ReadKey()
     End Sub
 
-    Sub AddMeetingAttendants()
+    Function PrintEditPatientInfo()
+    Console.CursorVisible = False
+        Dim currentChoice As Integer = 1
+        Dim choice As ConsoleKey
+        Console.Clear()
+        Console.WriteLine("Change:
+   Name
+   Phone number
+   Email
+   DOB
+   Implant/Processor Company
+   Implant Model
+   Processor Model
+   Additional Disabilties
+")
+        Console.SetCursorPosition(0, 1)
+        Console.Write(" >")
+        Do
+            choice = Console.ReadKey(True).Key
+            Select Case choice
+                Case ConsoleKey.W, ConsoleKey.UpArrow, ConsoleKey.A, ConsoleKey.LeftArrow
+                    If currentChoice > 1 Then
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write("  ")
+                        currentChoice -= 1
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write(" >")
+                    End If
+                Case ConsoleKey.S, ConsoleKey.DownArrow, ConsoleKey.D, ConsoleKey.RightArrow
+                    If currentChoice < 8 Then
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write("  ")
+                        currentChoice += 1
+                        Console.SetCursorPosition(0, currentChoice)
+                        Console.Write(" >")
+                    End If
+            End Select
+        Loop Until choice = ConsoleKey.Enter
+        Console.CursorVisible = True
+        Return currentChoice
+    End Function
 
+    Sub AddMeetingAttendants()
+        'find meeting
+        'get audiologists
+        'add them
+        Dim meetings As New List(Of Integer)
+        Dim stringHandling As New ErrorHandling()
+        Dim day1 As Date
+        Dim place As String
+
+        While meetings.Count = 0
+            Console.Writeline("Enter meeting place: ")
+            place = stringHandling.TryString(1)
+            Console.Writeline("Enter date of meeting: ")
+            day1 = stringHandling.GetDate3()
+
+            Dim rsFindMeetings As Odbc.OdbcDataReader
+            Dim sqlFindMeetings As New Odbc.OdbcCommand("SELECT * FROM meeting WHERE place LIKE %?% AND DATE = ?", Module1.GetConnection())
+            sqlFindMeetings.Parameters.AddWithValue("place", place)
+            sqlFindMeetings.Parameters.AddWithValue("date", day1)
+            rsFindMeetings = sqlFindMeetings.ExecuteReader()
+
+            Console.Writeline("Meetings: " & place & " - " & stringHandling.SQLDate(day1))
+            While rsFindMeetings.Read 
+            meetings.Add(rsFindMeetings("meetingID"))
+            Console.WriteLine(meetings.Count & ". " & rsFindMeetings("description") & " " & rsFindMeetings("starttime").ToString & " - " & rsFindMeetings("endtime").ToString)
+            End While
+        End While
+        Dim meetingChoice As Integer = -1
+        While meetingChoice > meetings.Count Or meetingChoice < meetings.Count
+            Console.Write"Enter meeting choice: ")
+            Try
+                meetingChoice = Console.ReadLine()
+            Catch ex As Exception
+                Console.WriteLine("An error occured. " & ex.Message)
+            End Try
+        End While
+        Dim bookMeetAtt As New Booking()
+        bookMeetAtt.
     End Sub
 
     Sub CancelAnnualLeave()
