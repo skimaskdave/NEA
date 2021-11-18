@@ -124,7 +124,7 @@
                 Case 2
                     If YesNo("Are you working on Wednesday") = True Then
                         Console.WriteLine("Wednesday")
-                        While startTime(2) >= endTime(0)
+                        While startTime(2) >= endTime(2)
                             Console.WriteLine("Enter start time:")
                             startTime(2) = stringHandling.GetTime
                             Console.WriteLine("Enter end time:")
